@@ -44,7 +44,7 @@ class FREDDataView(View):
                     }
                     active_series.append(processed_series)
 
-            # Sort series by update frequency and last updated date
+        
             active_series.sort(key=lambda x: (
                 ['D', 'W', 'BW', 'M', 'Q', 'SA', 'A'].index(x['frequency_short']),
                 datetime.strptime(x['last_updated'], "%Y-%m-%d %H:%M:%S-%f")
@@ -55,5 +55,25 @@ class FREDDataView(View):
                 "series": active_series
             })
 
+        except requests.RequestException as e:
+            return JsonResponse({"error": str(e)}, status=500)
+        
+
+class SeriesDataView(View):
+    def get(self, request, series_id):
+        base_url = "https://api.stlouisfed.org/fred/series/observations"
+        params = {
+            "series_id": series_id,
+            "api_key": settings.FRED_API_KEY,
+            "file_type": "json",
+            "sort_order": "desc",
+            "limit": 100  
+        }
+
+        try:
+            response = requests.get(base_url, params=params)
+            response.raise_for_status()
+            data = response.json()
+            return JsonResponse(data)
         except requests.RequestException as e:
             return JsonResponse({"error": str(e)}, status=500)
