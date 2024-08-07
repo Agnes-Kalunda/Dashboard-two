@@ -1,11 +1,11 @@
 
 import './App.css';
-import Dashboard from './components/FREDDashboard';
+import FREDDashboard from './components/FREDDashboard';
 
 function App() {
   return (
     <div>
- <FREDDashboard/>
+  <FREDDashboard/>
     </div>
 
   );

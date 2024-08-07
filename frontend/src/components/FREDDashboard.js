@@ -44,7 +44,7 @@ const FREDDashboard = () => {
   useEffect(() => {
     const fetchSeries = async () => {
       try {
-        const response = await axios.get('/api/fred-data/');
+        const response = await axios.get('http://localhost:8000/fred-data/');
         setSeries(response.data.series);
         if (response.data.series.length > 0) {
           setSelectedSeries(response.data.series[0].id);
@@ -62,7 +62,7 @@ const FREDDashboard = () => {
       if (!selectedSeries) return;
 
       try {
-        const response = await axios.get(`/api/series-data/${selectedSeries}/`);
+        const response = await axios.get(`http://localhost:8000/series-data/${selectedSeries}/`);
         setSeriesData(response.data.observations);
       } catch (error) {
         console.error('Error fetching series data:', error);
